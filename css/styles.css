@@ -237,3 +237,33 @@ kbd.hit{transform:translateY(2px);border-bottom-width:1px;border-color:var(--ac)
 .gear-body h3{font-size:1.15rem;margin:.3rem 0 .8rem}
 .specs{display:flex;flex-wrap:wrap;gap:.4rem;list-style:none;padding:0}
 .specs li{padding:.2rem .65rem;border:1px solid var(--line);border-radius:99px;font-size:.78rem;color:var(--mute);background:var(--bg2)}
+/* ---------- mobile fit: paste at the very bottom of css/styles.css ---------- */
+html,body{max-width:100%;overflow-x:hidden}
+img,svg,canvas{max-width:100%}
+.hero>*,.slide>*,.head>*,.gear-body{min-width:0}
+
+@media(max-width:860px){
+  /* the 2.5rem side padding was eating 5rem of a phone's width */
+  main.w,footer.w{padding-inline:0;margin-left:auto;margin-right:auto;width:calc(100% - 2rem)}
+  section{padding-top:3.2rem}
+  .hero{padding:1.5rem 0 2rem;gap:1.5rem}
+  .photo{width:min(300px,80%)}
+  .track{padding-right:1.5rem}
+  .slide{flex-basis:calc(100% - 1.5rem);padding:1.4rem 1rem}
+  .stack{margin:0 24px 24px 0;max-width:calc(100% - 24px)}
+  .stack.wide{--w:100%}
+  .gear-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+  .grp{padding:1rem}
+  .mail{font-size:clamp(1rem,5.2vw,1.6rem)}
+  footer.w{flex-wrap:wrap;gap:.6rem}
+}
+
+@media(max-width:480px){
+  h1{font-size:clamp(1.9rem,10vw,2.6rem);overflow-wrap:anywhere}
+  h2{font-size:clamp(1.6rem,8vw,2rem)}
+  .lead{font-size:1rem}
+  .focus{flex-direction:column;align-items:flex-start}
+  .head{gap:.6rem}
+  .sk{padding:.4rem .8rem .4rem .65rem;font-size:.88rem}
+  .chart{padding:.8rem}
+}
