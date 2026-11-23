@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lance Adrian — Web Developer & App Developer</title>
+<meta name="description" content="Lance Adrian is a web and app developer building responsive websites and practical digital solutions with Flutter, React, FastAPI and PHP. Currently focused on AI integrations.">
+<meta name="theme-color" content="#ffffff">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")==="dark"?"dark":"light"}catch(e){}</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐊%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="deco" aria-hidden="true"></div>
+
+<aside class="sidebar" id="sidebar">
+  <a class="logo" href="#profile">Lance Adrian</a>
+  <nav class="side-nav">
+    <a href="#profile">Profile</a>
+    <a href="#projects">Projects</a>
+    <a href="#stacks">Stacks</a>
+    <a href="#gear">Gear</a>
+    <a href="#github">GitHub</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <!-- Sidebar Playground -->
+  <div class="side-widgets">
+    <div class="side-label">Playground</div>
+    <button class="widget-btn" id="widget-glow" aria-pressed="false"><span></span> Glow Blob</button>
+    <button class="widget-btn" id="widget-snake" aria-haspopup="dialog"><span></span>Snake</button>
+  </div>
+
+  <div class="side-controls">
+    <button class="theme" id="sound" type="button" aria-pressed="true" aria-label="Turn sound off">
+      <svg id="soundIcon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 5 6 9H3v6h3l5 4z"/>
+        <path class="wave1" d="M15.5 8.5a5 5 0 0 1 0 7"/>
+        <path class="wave2" d="M18.5 5.5a9 9 0 0 1 0 13"/>
+        <path class="mute-x" d="M16 9l5 5M21 9l-5 5"/>
+      </svg>
+    </button>
+    <button class="theme" id="theme" type="button" aria-pressed="false" aria-label="Switch to dark mode">
+      <span id="themeIcon" aria-hidden="true">☾</span>
+    </button>
+  </div>
+</aside>
+
+<button class="menu" id="menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar">
+  <span></span><span></span><span></span>
+</button>
+
+<!-- Snake game: full-screen board (outside the sidebar on purpose) -->
+<div class="game-modal" id="game-modal" aria-hidden="true">
+  <div class="game-card" id="game-card" role="dialog" aria-modal="true" aria-labelledby="game-title" tabindex="-1">
+    <div class="game-hud">
+      <h2 id="game-title">Snake</h2>
+      <div class="game-stats"><span>Score <b id="game-score">0</b></span><span>Best <b id="game-high">0</b></span></div>
+      <div class="game-btns">
+        <button id="game-full" type="button" aria-label="Enter full screen" aria-pressed="false">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path class="fs-in" d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+            <path class="fs-out" d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
+          </svg>
+        </button>
+        <button id="game-close" type="button" aria-label="Close game">×</button>
+      </div>
+    </div>
+    <div class="game-stage">
+      <canvas id="snake-canvas" aria-label="Snake game board"></canvas>
+      <div class="game-overlay on" id="game-overlay">
+        <p class="g-msg" id="game-msg">Ready?</p>
+        <p class="g-sub" id="game-sub">Press an arrow key, WASD or Space to start</p>
+        <button class="btn pri" id="game-action" type="button">Start</button>
+      </div>
+    </div>
+    <div class="game-foot">
+      <div class="dpad" aria-label="On-screen controls">
+        <button type="button" data-dir="up" aria-label="Up">▲</button>
+        <button type="button" data-dir="left" aria-label="Left">◀</button>
+        <button type="button" data-dir="down" aria-label="Down">▼</button>
+        <button type="button" data-dir="right" aria-label="Right">▶</button>
+      </div>
+      <p class="hint-touch">Swipe anywhere on the board to steer, or use the pad.</p>
+      <div class="hints" aria-label="Controls">
+        <div class="hint-item"><span>Move</span>
+          <span class="keys"><kbd data-k="arrowup">↑</kbd><kbd data-k="arrowleft">←</kbd><kbd data-k="arrowdown">↓</kbd><kbd data-k="arrowright">→</kbd></span>
+          <span class="hint-or">or</span>
+          <span class="keys"><kbd data-k="w">W</kbd><kbd data-k="a">A</kbd><kbd data-k="s">S</kbd><kbd data-k="d">D</kbd></span>
+        </div>
+        <div class="hint-item"><span>Pause</span><kbd class="wide" data-k="space">Space</kbd></div>
+        <div class="hint-item"><span>Full screen</span><kbd data-k="f">F</kbd></div>
+        <div class="hint-item"><span>Close</span><kbd data-k="escape">Esc</kbd></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="w" id="profile">
+<div class="hero">
+  <div>
+    <h1>Lance Adrian</h1>
+    <p class="role">Web Developer &amp; App Developer</p>
+    <p class="lead">Building responsive websites and practical digital solutions while continuously exploring new technologies.</p>
+
+    <div class="focus">
+      <p class="focus-text">These days, I'm focused on <strong>AI Integrations</strong></p>
+      <ul class="ai-icons" aria-label="AI tools I work with">
+        <!-- Sparkle -->
+        <li title="Gemini-style sparkle">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 1.5c.7 5.6 3.9 9.8 10.5 10.5-6.6.7-9.8 4.9-10.5 10.5C11.3 16.9 8.1 12.7 1.5 12 8.1 11.3 11.3 7.1 12 1.5z"/></svg>
+        </li>
+        <!-- Knot / flower -->
+        <li title="OpenAI-style knot">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <ellipse cx="12" cy="7" rx="3.2" ry="5"/>
+            <ellipse cx="12" cy="7" rx="3.2" ry="5" transform="rotate(60 12 12)"/>
+            <ellipse cx="12" cy="7" rx="3.2" ry="5" transform="rotate(120 12 12)"/>
+            <ellipse cx="12" cy="7" rx="3.2" ry="5" transform="rotate(180 12 12)"/>
+            <ellipse cx="12" cy="7" rx="3.2" ry="5" transform="rotate(240 12 12)"/>
+            <ellipse cx="12" cy="7" rx="3.2" ry="5" transform="rotate(300 12 12)"/>
+          </svg>
+        </li>
+        <!-- Starburst -->
+        <li title="Claude-style starburst">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M12 2v6M12 16v6M2 12h6M16 12h6M4.9 4.9l4.2 4.2M14.9 14.9l4.2 4.2M19.1 4.9l-4.2 4.2M9.1 14.9l-4.2 4.2M7 2.9l2 3.7M15 17.4l2 3.7M17 2.9l-2 3.7M9 17.4l-2 3.7M2.9 7l3.7 2M17.4 15l3.7 2M21.1 7l-3.7 2M6.6 15l-3.7 2"/>
+          </svg>
+        </li>
+        <!-- Dot cluster -->
+        <li title="Model cluster">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+            <circle cx="12" cy="12" r="3"/><circle cx="12" cy="4.5" r="2.2"/><circle cx="12" cy="19.5" r="2.2"/>
+            <circle cx="4.5" cy="12" r="2.2"/><circle cx="19.5" cy="12" r="2.2"/>
+            <circle cx="6.7" cy="6.7" r="1.6"/><circle cx="17.3" cy="17.3" r="1.6"/>
+            <circle cx="17.3" cy="6.7" r="1.6"/><circle cx="6.7" cy="17.3" r="1.6"/>
+          </svg>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="photo"><img src="assets/profile.webp" alt="Lance Adrian giving a thumbs up" width="948" height="1024"></div>
+</div>
+
+<section id="projects">
+  <div class="head">
+    <div><span class="num">&lt;01&gt;</span><h2>Projects</h2><p class="sub">Two featured projects — swipe, or use the arrows. Tap a card to flip its screens.</p></div>
+    <div class="ctrl"><button id="prev" aria-label="Previous project">←</button><span id="count" aria-live="polite">01 / 02</span><button id="next" aria-label="Next project">→</button></div>
+  </div>
+  <div class="track" id="track"></div>
+  <div class="pager" id="pager" aria-label="Project pager"></div>
+</section>
+
+<section id="stacks">
+  <div class="head">
+    <div><span class="num">&lt;02&gt;</span><h2>Tech stacks</h2><p class="sub">Everything I build, ship and run with, grouped by area.</p></div>
+  </div>
+  <div id="groups"></div>
+</section>
+
+<section id="gear">
+  <div class="head">
+    <div><span class="num">&lt;03&gt;</span><h2>Gear</h2><p class="sub">The hardware I build and play on.</p></div>
+  </div>
+  <ul class="gear-grid">
+    <li class="gear">
+      <div class="gear-img"><img src="assets/gear/laptop.jpg" alt="MSI Thin A15 laptop" loading="lazy"></div>
+      <div class="gear-body">
+        <span class="gear-type">Laptop</span>
+        <h3>MSI Thin A15 B7UCX-084PH</h3>
+        <ul class="specs">
+          <li>15.6" FHD 144Hz</li>
+          <li>AMD Ryzen 5 7535HS</li>
+          <li>8GB RAM</li>
+          <li>512GB SSD</li>
+          <li>RTX 2050 4GB</li>
+          <li>Windows 11</li>
+        </ul>
+      </div>
+    </li>
+    <li class="gear">
+      <div class="gear-img"><img src="assets/gear/keyboard.jpg" alt="Attack Shark X68 PRO HE keyboard" loading="lazy"></div>
+      <div class="gear-body">
+        <span class="gear-type">Keyboard</span>
+        <h3>Attack Shark X68 PRO HE</h3>
+        <ul class="specs">
+          <li>Wireless</li>
+          <li>Rapid Trigger</li>
+          <li>Magnetic switch</li>
+        </ul>
+      </div>
+    </li>
+    <li class="gear">
+      <div class="gear-img"><img src="assets/gear/mouse.jpg" alt="Redragon M610 Gainer gaming mouse" loading="lazy"></div>
+      <div class="gear-body">
+        <span class="gear-type">Mouse</span>
+        <h3>Redragon M610 Gainer</h3>
+        <ul class="specs">
+          <li>Gaming mouse</li>
+        </ul>
+      </div>
+    </li>
+    <li class="gear">
+      <div class="gear-img"><img src="assets/gear/headset.jpg" alt="Onikuma X22 RGB gaming headset" loading="lazy"></div>
+      <div class="gear-body">
+        <span class="gear-type">Headset</span>
+        <h3>Onikuma X22 RGB</h3>
+        <ul class="specs">
+          <li>Noise-cancelling mic</li>
+          <li>Multi-platform</li>
+          <li>RGB</li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+</section>
+
+<section id="github">
+  <div class="head"><div><span class="num">&lt;04&gt;</span><h2>GitHub</h2><p class="sub">Contribution activity.</p></div></div>
+  <div class="chart"><img src="https://ghchart.rshah.org/0f766e/DRIANZ25" alt="GitHub contribution chart for DRIANZ25" loading="lazy"></div>
+  <p class="sub" style="margin-top:1rem">See the full history on <a href="https://github.com/DRIANZ25" target="_blank" rel="noopener">GitHub ↗</a></p>
+</section>
+
+<section id="contact">
+  <div class="head"><div><span class="num">&lt;05&gt;</span><h2>Got an app to build?</h2><p class="sub">I’m open to commissions. Here’s what I can do for you:</p></div></div>
+  <ul class="tags" style="margin-top:1rem">
+    <li>Building apps</li>
+    <li>Building websites</li>
+    <li>Deploying software applications</li>
+    <li>Running software applications</li>
+    <li>Databases</li>
+    <li>Background services</li>
+  </ul>
+  <a class="mail" href="mailto:lancetejero05@gmail.com">lancetejero05@gmail.com</a>
+
+  <ul class="socials">
+    <li>
+      <a href="mailto:lancetejero05@gmail.com" class="gmail" aria-label="Email Lance Adrian on Gmail" title="Gmail">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
+      </a>
+    </li>
+    <li>
+      <a href="https://www.facebook.com/estrangherong.tamad" target="_blank" rel="noopener" class="facebook" aria-label="Lance Adrian on Facebook" title="Facebook">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </a>
+    </li>
+    <li>
+      <a href="https://www.instagram.com/a.ddrianz404/" target="_blank" rel="noopener" class="instagram" aria-label="Lance Adrian on Instagram" title="Instagram">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16.162a4.162 4.162 0 1 1 0-8.324 4.162 4.162 0 0 1 0 8.324zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+      </a>
+    </li>
+    <li>
+      <a href="https://x.com/LanceAdr1an" target="_blank" rel="noopener" class="x" aria-label="Lance Adrian on X" title="X">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>
+      </a>
+    </li>
+  </ul>
+</section>
+</main>
+<footer class="w"><span>© 2026 Lance Adrian</span><a href="#profile">Back to top ↑</a></footer>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
